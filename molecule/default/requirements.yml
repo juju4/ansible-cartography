@@ -1,4 +1,6 @@
 ---
 
 collections:
-  - ansible.posix
+  - name: ansible.posix
+roles:
+  - name: kevincoakley.neo4j
