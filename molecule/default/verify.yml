@@ -1,0 +1,132 @@
+---
+
+- name: Verify
+  hosts: cartographygroup
+  gather_facts: true
+  vars:
+    cartography_home: /var/_cartography
+    cartography_start: "/usr/local/bin/cartography"
+    binary_neo4j: "/usr/bin/neo4j"
+    config_neo4j: /etc/neo4j/neo4j.conf
+    config: ""
+    ports:
+      # neo4j
+      - { h: localhost, p: 7687 }
+    url: http://localhost:6100
+    is_container: false
+  tasks:
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
+    - name: Validate that needed packages are present
+      ansible.builtin.assert:
+        that: ansible_facts.packages['python3-dev']
+
+    - name: Check cartography executable
+      ansible.builtin.stat:
+        path: "{{ cartography_start }}"
+      register: bin1
+    - name: Validate cartography executable is present
+      ansible.builtin.assert:
+        that: bin1.stat.exists and bin1.stat.size != 0 and bin1.stat.mode == '0755'
+
+    - name: Check neo4j binary
+      ansible.builtin.stat:
+        path: "{{ binary_neo4j }}"
+      register: bin2
+    - name: Validate redis binary is present
+      ansible.builtin.assert:
+        that: bin2.stat.exists and bin2.stat.size != 0 and bin2.stat.mode == '0755'
+
+    - name: Check neo4j config file
+      ansible.builtin.stat:
+        path: "{{ config_neo4j }}"
+      register: cfg1
+    - name: Validate cartography configuration files are present
+      ansible.builtin.assert:
+        that: cfg1.stat.exists and cfg1.stat.size != 0
+
+    - name: Ensure neo4j running
+      ansible.builtin.command: pgrep -u neo4j java
+      register: ps3
+      changed_when: false
+      failed_when: false
+    - name: Validate ps output
+      ansible.builtin.assert:
+        that: ps3.stdout
+      when:
+        - not is_container|bool
+
+    - name: Check all processes
+      ansible.builtin.command: ps aux
+      changed_when: false
+      register: psa
+    - name: Debug | ps aux output
+      ansible.builtin.debug: var=psa verbosity=1
+
+    - name: Ensure ports are listening
+      ansible.builtin.wait_for:
+        host: "{{ item.h }}"
+        port: "{{ item.p }}"
+        timeout: 10
+      with_items: "{{ ports }}"
+      when:
+        - not is_container|bool
+
+    - name: Fetch localhost endpoint
+      ansible.builtin.uri:
+        url: "{{ url }}"
+        validate_certs: no
+        return_content: yes
+      register: web
+      failed_when: false
+    - name: Validate localhost endpoint
+      ansible.builtin.assert:
+        that: >
+          "'cartography' in web.content"
+      when:
+        - not is_container|bool
+
+    - name: Pip outdated
+      ansible.builtin.command: pip list --outdated --path /usr/local/
+      changed_when: false
+      register: outdated
+    - name: Validate no outdated python pip
+      ansible.builtin.assert:
+        that:
+          - "'Package' not in outdated.stdout"
+
+    - name: Ensure pip-audit is present
+      ansible.builtin.pip:
+        name: pip-audit
+        state: present
+    - name: Pip-audit
+      ansible.builtin.command: pip-audit --path /usr/local
+      changed_when: false
+      register: audit
+    - name: Validate no known vulnerabilities from pip-audit
+      ansible.builtin.assert:
+        that:
+          - "'No known vulnerabilities found' in audit.stderr"
+
+    - name: Get errors in syslog
+      ansible.builtin.command: grep ERROR /var/log/syslog
+      changed_when: false
+      register: errors
+    - name: Validate no errors
+      ansible.builtin.assert:
+        that:
+          - "'ERROR' in errors.stdout"
+      ignore_errors: true  # noqa ignore-errors
+
+    - name: Get errors in syslog
+      ansible.builtin.command: systemctl list-timers  # noqa command-instead-of-module
+      changed_when: false
+      failed_when: false
+      register: timers
+    - name: Validate cartography in timers
+      ansible.builtin.assert:
+        that:
+          - "'cartography' in timers.stdout"
+      when:
+        - not is_container|bool

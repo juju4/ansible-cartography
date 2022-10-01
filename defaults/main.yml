@@ -1,0 +1,16 @@
+---
+# defaults file for juju4.cartography
+
+cartography_version: 0.65.0
+cartography_user: _cartography
+cartography_home: /var/_cartography
+
+cartography_neo4j_url: 'bolt://localhost:7687'
+# FIXME! not running in continuous
+cartography_svc_args: '--cve-enabled'
+# cartography_svc_args: '–azure-sp-auth –azure-sync-all-subscriptions –azure-tenant-id ${AZURE_TENANT_ID} –azure-client-id ${AZURE_CLIENT_ID} –azure-client-secret-env-var AZURE_CLIENT_SECRET'
+# If empty, will only sync at service start. right?
+cartography_cron_args: ''
+# cartography_cron_args: '--aws-sync-all-profiles --azure-sync-all-subscriptions'
+
+cartography_cgroups_restriction_enable: true

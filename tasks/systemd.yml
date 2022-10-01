@@ -1,0 +1,39 @@
+---
+
+- name: Ensure systemd is present
+  ansible.builtin.package:
+    name: systemd
+    state: present
+
+- name: Configure cartography /etc/default
+  ansible.builtin.template:
+    src: "default-env.j2"
+    dest: "/etc/default/cartography"
+    mode: '0640'
+    owner: root
+    group: "{{ cartography_user }}"
+
+- name: Configure cartography systemd unit
+  ansible.builtin.template:
+    src: "systemd-cartography.service.j2"
+    dest: "/etc/systemd/system/cartography.service"
+    mode: '0644'
+  notify:
+    - Reload systemd
+
+- name: Configure cartography systemd timer
+  ansible.builtin.template:
+    src: "systemd-cartography.timer.j2"
+    dest: "/etc/systemd/system/cartography.timer"
+    mode: '0644'
+  notify:
+    - Reload systemd
+
+- name: Enable and start cartography timer
+  ansible.builtin.service:
+    name: cartography.timer
+    state: started
+    enabled: yes
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

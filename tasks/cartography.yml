@@ -1,0 +1,36 @@
+---
+
+- name: Install cartography dependencies
+  ansible.builtin.package:
+    name: "{{ pkg_deps }}"
+    state: present
+
+- name: Install cartography
+  ansible.builtin.pip:
+    name: cartography
+    version: "{{ cartography_version | default(omit) }}"
+    state: present
+
+- name: Ensure cartography user exists
+  ansible.builtin.user:
+    name: "{{ cartography_user }}"
+    home: "{{ cartography_home }}"
+    system: true
+
+- name: Configure regular cartography update as scheduled task
+  ansible.builtin.cron:
+    name: "cartography maintenance"
+    weekday: "*"
+    minute: "0"
+    hour: "12"
+    user: "{{ cartography_user }}"
+    job: "cartography {{ cartography_cron_args }}"
+    cron_file: "ansible_cartography"
+  when: cartography_cron_args | string
+
+- name: Ensure logs folder exists
+  ansible.builtin.file:
+    dest: /var/log/cartography
+    state: directory
+    mode: '0775'
+    owner: "{{ cartography_user }}"

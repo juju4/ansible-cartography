@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: juju4
+  role_name: cartography
+  description: Setup cartography server, a Python tool that consolidates infrastructure assets and the relationships between them in an intuitive graph view powered by a Neo4j database.
+  license: BSD
+  min_ansible_version: '2.12'
+  standalone: true
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+        - focal
+  galaxy_tags:
+    - security
+    - inventory
+    - assetmanagement
+dependencies:
+  - role: kevincoakley.neo4j
