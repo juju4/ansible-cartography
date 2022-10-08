@@ -1,4 +1,6 @@
+{{ ansible_managed | comment }}
 # Note: export is required for shell usage, but not for systemd EnvironmentFile
-NEO4J_PASSWORD=
-VAR=
-CARTOGRAPHY_ARGS="--neo4j-uri {{ cartography_neo4j_url }} {{ cartography_svc_args }}"
+{% for var, value in item.environment_vars.items() %}
+{{ var }}={{ value }}
+{% endif %}
+CARTOGRAPHY_ARGS="--neo4j-uri {{ cartography_neo4j_url }} {{ item.cartography_args }}"

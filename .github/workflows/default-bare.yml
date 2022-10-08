@@ -85,9 +85,9 @@ jobs:
         run: |
           set -x
           cat /etc/neo4j/neo4j.conf
-          sudo cat /etc/default/cartography
-          cat /etc/systemd/system/cartography.service
-          cat /etc/systemd/system/cartography.timer
+          sudo cat /etc/default/cartography*
+          cat /etc/systemd/system/cartography@.service
+          cat /etc/systemd/system/cartography@.timer
           cat /lib/systemd/system/neo4j.service
         if: ${{ always() }}
         continue-on-error: true

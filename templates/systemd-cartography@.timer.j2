@@ -1,0 +1,11 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=Run cartography daily - %i
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=cartography@%i.target
