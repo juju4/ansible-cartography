@@ -15,3 +15,5 @@ cartography_cron_args: ''
 # cartography_cron_args: '--aws-sync-all-profiles --azure-sync-all-subscriptions'
 
 cartography_cgroups_restriction_enable: true
+
+is_container: false

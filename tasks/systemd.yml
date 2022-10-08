@@ -34,6 +34,7 @@
     name: cartography.timer
     state: started
     enabled: yes
+  when: not is_container | bool
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
