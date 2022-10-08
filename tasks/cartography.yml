@@ -7,7 +7,7 @@
 
 - name: Install cartography
   ansible.builtin.pip:
-    name: cartography
+    name: "{{ cartography_pip }}"
     version: "{{ cartography_version | default(omit) }}"
     state: present
 

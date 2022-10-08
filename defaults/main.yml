@@ -1,6 +1,8 @@
 ---
 # defaults file for juju4.cartography
 
+cartography_pip: cartography
+# cartography_pip: git+https://github.com/lyft/cartography@branch
 cartography_version: 0.65.0
 cartography_user: _cartography
 cartography_home: /var/_cartography
