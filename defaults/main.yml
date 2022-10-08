@@ -5,6 +5,7 @@ cartography_version: 0.65.0
 cartography_user: _cartography
 cartography_home: /var/_cartography
 
+cartography_env_variables_template: "default-env.j2"
 cartography_neo4j_url: 'bolt://localhost:7687'
 # FIXME! not running in continuous
 cartography_svc_args: '--cve-enabled'
