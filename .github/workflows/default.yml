@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          path: env.ANSIBLE_ROLE
+          path: ${{ ANSIBLE_ROLE }}
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
