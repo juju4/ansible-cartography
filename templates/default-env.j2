@@ -2,5 +2,5 @@
 # Note: export is required for shell usage, but not for systemd EnvironmentFile
 {% for var, value in item.environment_vars.items() %}
 {{ var }}={{ value }}
-{% endif %}
+{% endfor %}
 CARTOGRAPHY_ARGS="--neo4j-uri {{ cartography_neo4j_url }} {{ item.cartography_args }}"
