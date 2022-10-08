@@ -54,8 +54,7 @@ jobs:
           find -ls
       - uses: codespell-project/actions-codespell@master
         with:
-          ignore_words_file: .codespellignore
-          path: ${{ env.ANSIBLE_ROLE }}
+          ignore_words_file: ${{ env.ANSIBLE_ROLE }}/.codespellignore
         if: ${{ always() }}
       - name: yamllint
         run: |
