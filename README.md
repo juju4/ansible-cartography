@@ -48,9 +48,9 @@ $ MOLECULE_DISTRO=ubuntu:20.04 molecule test --destroy=never
 ```
 systemd-run --on-calendar=2022-02-02T23:00 systemctl start cartography.service
 ```
-or manually
+or manually, exporting first variables from /etc/default/cartography (if you call file directly, cartography won't read variable and will return empty value)
 ```
-$ . /etc/default/cartography
+$ export VAR1= VAR2=
 $ cartography $CARTOGRAPHY_ARGS
 ```
 
