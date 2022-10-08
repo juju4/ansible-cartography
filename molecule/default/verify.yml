@@ -16,7 +16,8 @@
     is_container: false
   pre_tasks:
     - name: Debug | var ansible_virtualization_type
-      ansible.builtin.debug: var=ansible_virtualization_type
+      ansible.builtin.debug:
+        var: ansible_virtualization_type
     - name: Set fact is_container
       ansible.builtin.set_fact:
         is_container: true
