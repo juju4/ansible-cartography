@@ -126,14 +126,17 @@
     - name: Get errors in syslog
       ansible.builtin.command: grep ERROR /var/log/syslog
       changed_when: false
+      failed_when: false
       register: errors
     - name: Validate no errors
       ansible.builtin.assert:
         that:
           - "'ERROR' in errors.stdout"
       ignore_errors: true  # noqa ignore-errors
+      when:
+        - not is_container|bool
 
-    - name: Get errors in syslog
+    - name: Get systemd timers
       ansible.builtin.command: systemctl list-timers  # noqa command-instead-of-module
       changed_when: false
       failed_when: false
