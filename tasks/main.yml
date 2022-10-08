@@ -4,5 +4,7 @@
 - name: Include os family variables
   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
 
-- import_tasks: cartography.yml
-- import_tasks: systemd.yml
+- name: Import cartography
+  ansible.builtin.import_tasks: cartography.yml
+- name: Import systemd
+  ansible.builtin.import_tasks: systemd.yml
