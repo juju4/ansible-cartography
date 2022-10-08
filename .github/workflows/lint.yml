@@ -52,9 +52,15 @@ jobs:
           pwd
           env
           find -ls
+      - uses: codespell-project/actions-codespell@master
+        with:
+          ignore_words_file: .codespellignore
+        if: ${{ always() }}
       - name: yamllint
         run: |
           cd $GITHUB_WORKSPACE/$ANSIBLE_ROLE && yamllint .
+        if: ${{ always() }}
       - name: ansible-lint
         run: |
           cd $GITHUB_WORKSPACE/$ANSIBLE_ROLE && ansible-lint
+        if: ${{ always() }}
