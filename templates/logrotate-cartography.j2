@@ -1,0 +1,21 @@
+{{ ansible_managed | comment }}
+## /etc/logrotate.d/cartography
+
+/var/log/cartography/*.log {
+    rotate {{ cartography_logrotate_rotate|int }}
+    {{ cartography_logrotate_period }}
+{% if cartography_logrotate_datext %}
+        dateext
+        dateformat {{ cartography_logrotate_datformat }}
+{% endif%}
+    missingok
+    notifempty
+{% if cartography_logrotate_compress %}
+    compress
+    delaycompress
+{% endif %}
+    missingok
+    notifempty
+    copytruncate
+    create 0640 _cartography root
+}

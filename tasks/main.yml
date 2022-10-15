@@ -17,5 +17,7 @@
 
 - name: Import cartography
   ansible.builtin.import_tasks: cartography.yml
+- name: Import logrotate
+  ansible.builtin.import_tasks: logrotate.yml
 - name: Import systemd
   ansible.builtin.import_tasks: systemd.yml

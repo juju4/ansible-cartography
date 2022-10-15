@@ -1,0 +1,16 @@
+---
+
+- name: Ensure logrotate package is present
+  ansible.builtin.package:
+    name: logrotate
+    state: present
+  register: pkg_result
+  until: pkg_result is success
+
+- name: Add logrotate configuration for cartography logs
+  ansible.builtin.template:
+    src: logrotate-cartography.j2
+    dest: /etc/logrotate.d/cartography
+    mode: '0644'
+    validate: 'logrotate -dv %s'
+    backup: yes

@@ -43,4 +43,11 @@ cartography_instances:
 
 cartography_cgroups_restriction_enable: true
 
+cartography_logrotate_period: 'daily'
+cartography_logrotate_rotate: 90
+cartography_logrotate_compress: true
+cartography_logrotate_delaycompress: true
+cartography_logrotate_datext: true
+cartography_logrotate_datformat: '-%Y%m%d'
+
 is_container: false
