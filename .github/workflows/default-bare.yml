@@ -77,7 +77,13 @@ jobs:
         run: |
           systemctl -l --no-pager status neo4j || true
           systemctl -l --no-pager status cartography || true
+          systemctl -l --no-pager status cartography@ || true
+          systemctl -l --no-pager status cartography@default || true
+          systemctl -l --no-pager status cartography@.timer || true
+          systemctl -l --no-pager status cartography@default.timer || true
           systemd-analyze --no-pager security || true
+          systemd-analyze --no-pager security cartography@ || true
+          systemd-analyze --no-pager verify cartography@ || true
           rsyslogd -v
         if: ${{ always() }}
         continue-on-error: true
@@ -95,5 +101,13 @@ jobs:
         run: |
           set -x
           sudo -u _cartography cartography -h
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - cypher
+        run: |
+          set -x
+          echo "CALL db.schema.visualization()" | cypher-shell -a localhost -u neo4j -p neo4j
+          echo "MATCH (n) RETURN labels(n), count(*)" | cypher-shell -a localhost -u neo4j -p neo4j
+          echo "MATCH ()-[r]->() RETURN count(r) as count" | cypher-shell -a localhost -u neo4j -p neo4j
         if: ${{ always() }}
         continue-on-error: true
