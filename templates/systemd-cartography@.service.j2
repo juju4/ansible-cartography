@@ -61,7 +61,11 @@ MemoryDenyWriteExecute=yes
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 
 IPAccounting=yes
+{% if cartography_proxy_ip|string %}
+ IPAddressAllow={{ cartography_proxy_ip }}
+{% else %}
 # IPAddressAllow=localhost link-local multicast 10.0.0.0/8 192.168.0.0/16
+{% endif %}
 
 CapabilityBoundingSet=~CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_DAC_READ_SEARCH
 CapabilityBoundingSet=~CAP_SYS_RAWIO

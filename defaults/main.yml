@@ -42,6 +42,8 @@ cartography_instances:
   }
 
 cartography_cgroups_restriction_enable: true
+# if not empty, to be added to systemd service IPAddressAllow
+cartography_proxy_ip: ''
 
 cartography_logrotate_period: 'daily'
 cartography_logrotate_rotate: 90
