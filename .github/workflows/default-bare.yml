@@ -45,6 +45,19 @@ jobs:
           pwd
           env
           find -ls
+      - name: Set java
+        run: |
+          set -x
+          sudo rm -Rf /usr/lib/jvm/temurin-8-jdk-amd64 /usr/lib/jvm/temurin-11-jdk-amd64
+          sudo update-java-alternatives --list
+          sudo update-java-alternatives -s $(sudo update-java-alternatives -l | grep '17-jdk' | cut -d " " -f1)
+        continue-on-error: true
+      - name: Set java - /etc/environment
+        run: |
+          set -x
+          cat /etc/environment
+          sed "s@^JAVA_HOME=/usr/lib/jvm/temurin-11-jdk-amd64@JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64@" /etc/environment | sudo tee /etc/environment
+        continue-on-error: true
       - name: run test
         run: |
           cd $GITHUB_WORKSPACE/juju4.cartography && ansible-playbook -i localhost, --connection=local --become -vvv molecule/default/converge.yml ${ANSIBLE_EXTRA_VARS}
