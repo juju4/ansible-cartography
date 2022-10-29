@@ -11,7 +11,7 @@ cartography_env_variables_template: "default-env.j2"
 cartography_neo4j_url: 'bolt://localhost:7687'
 # FIXME! not running in continuous
 cartography_svc_args: '--cve-enabled'
-# cartography_svc_args: '–azure-sp-auth –azure-sync-all-subscriptions –azure-tenant-id ${AZURE_TENANT_ID} –azure-client-id ${AZURE_CLIENT_ID} –azure-client-secret-env-var AZURE_CLIENT_SECRET'
+# cartography_svc_args: '--azure-sp-auth --azure-sync-all-subscriptions --azure-tenant-id ${AZURE_TENANT_ID} --azure-client-id ${AZURE_CLIENT_ID} --azure-client-secret-env-var AZURE_CLIENT_SECRET'
 # systemd timer interval. same for all.
 cartography_timer_oncalendar: daily
 # cartography_timer_oncalendar: "*-*-* 00,12:00:00"
@@ -25,7 +25,7 @@ cartography_instances:
       }
   }
   - { name: azure1,
-      cartography_args: '–azure-sp-auth –azure-sync-all-subscriptions –azure-tenant-id ${AZURE_TENANT_ID1} –azure-client-id ${AZURE_CLIENT_ID1} –azure-client-secret-env-var AZURE_CLIENT_SECRET1',
+      cartography_args: '--azure-sp-auth --azure-sync-all-subscriptions --azure-tenant-id ${AZURE_TENANT_ID1} --azure-client-id ${AZURE_CLIENT_ID1} --azure-client-secret-env-var AZURE_CLIENT_SECRET1',
       environment_vars: {
         AZURE_TENANT_ID1: 'T1',
         AZURE_CLIENT_ID1: 'C1',
@@ -33,7 +33,7 @@ cartography_instances:
       }
   }
   - { name: azure2,
-      cartography_args: '–azure-sp-auth –azure-sync-all-subscriptions –azure-tenant-id ${AZURE_TENANT_ID2} –azure-client-id ${AZURE_CLIENT_ID2} –azure-client-secret-env-var AZURE_CLIENT_SECRET2',
+      cartography_args: '--azure-sp-auth --azure-sync-all-subscriptions --azure-tenant-id ${AZURE_TENANT_ID2} --azure-client-id ${AZURE_CLIENT_ID2} --azure-client-secret-env-var AZURE_CLIENT_SECRET2',
       environment_vars: {
         AZURE_TENANT_ID2: 'T2',
         AZURE_CLIENT_ID2: 'C2',
