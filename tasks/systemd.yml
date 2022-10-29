@@ -13,6 +13,7 @@
     owner: root
     group: "{{ cartography_user }}"
   loop: "{{ cartography_instances }}"
+  no_log: "{{ cartography_no_log | default(true) }}"
 
 - name: Configure cartography systemd unit
   ansible.builtin.template:
@@ -36,6 +37,7 @@
     state: started
     enabled: yes
   loop: "{{ cartography_instances }}"
+  no_log: "{{ cartography_no_log | default(true) }}"
   when: not is_container | bool
 
 - name: Flush handlers
