@@ -17,17 +17,6 @@
     home: "{{ cartography_home }}"
     system: true
 
-- name: Configure regular cartography update as scheduled task
-  ansible.builtin.cron:
-    name: "cartography maintenance"
-    weekday: "*"
-    minute: "0"
-    hour: "12"
-    user: "{{ cartography_user }}"
-    job: "cartography {{ cartography_cron_args }}"
-    cron_file: "ansible_cartography"
-  when: cartography_cron_args | string
-
 - name: Ensure logs folder exists
   ansible.builtin.file:
     dest: /var/log/cartography
