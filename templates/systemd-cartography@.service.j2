@@ -11,7 +11,7 @@ After=neo4j.service
 [Service]
 Type=oneshot
 EnvironmentFile=/etc/default/cartography-%i
-ExecStart=cartography ${CARTOGRAPHY_ARGS}
+ExecStart=/bin/bash -c "/usr/local/bin/cartography ${CARTOGRAPHY_ARGS}"
 WorkingDirectory={{ cartography_home }}
 User={{ cartography_user }}
 Group={{ cartography_user }}
@@ -24,7 +24,7 @@ NoNewPrivileges=yes
 PrivateTmp=true
 ProtectHome=yes
 ProtectSystem=yes
-# ProtectSystem=strict
+# ProtectSystem=strict
 {% if ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 21 %}
 # ProtectProc=noaccess
 {% endif %}
