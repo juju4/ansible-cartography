@@ -3,4 +3,7 @@
 collections:
   - name: ansible.posix
 roles:
+  # - name: kevincoakley.neo4j
   - name: kevincoakley.neo4j
+    src: https://github.com/juju4/ansible-role-neo4j/
+    version: devel
