@@ -4,6 +4,9 @@
   hosts: cartographygroup
   gather_facts: true
   vars:
+    neo4j_test_user: neo4j
+    # pragma: allowlist secret
+    neo4j_test_passwd: neo4j
     cartography_home: /var/_cartography
     cartography_start: "/usr/local/bin/cartography"
     binary_neo4j: "/usr/bin/neo4j"
@@ -12,7 +15,6 @@
     ports:
       # neo4j
       - { h: localhost, p: 7687 }
-    url: http://localhost:6100
     is_container: false
   pre_tasks:
     - name: Debug | var ansible_virtualization_type
@@ -88,20 +90,6 @@
       when:
         - not is_container|bool
 
-    - name: Fetch localhost endpoint
-      ansible.builtin.uri:
-        url: "{{ url }}"
-        validate_certs: no
-        return_content: yes
-      register: web
-      failed_when: false
-    - name: Validate localhost endpoint
-      ansible.builtin.assert:
-        that: >
-          "'cartography' in web.content"
-      when:
-        - not is_container|bool
-
     - name: Pip outdated
       ansible.builtin.command: pip list --outdated --path /usr/local/
       changed_when: false
@@ -147,5 +135,15 @@
       ansible.builtin.assert:
         that:
           - "'cartography' in timers.stdout"
+      when:
+        - not is_container|bool
+
+    - name: Check few cypher queries  # noqa command-instead-of-shell
+      ansible.builtin.shell: "{{ item }}"
+      changed_when: false
+      loop:
+        - "echo \"CALL db.schema.visualization()\" | cypher-shell -a localhost -u {{ neo4j_test_user }} -p {{ neo4j_test_passwd }}"
+        - "echo \"MATCH (n) RETURN labels(n), count(*)\" | cypher-shell -a localhost -u {{ neo4j_test_user }} -p {{ neo4j_test_passwd }}"
+        - "echo \"MATCH ()-[r]->() RETURN count(r) as count\" | cypher-shell -a localhost -u {{ neo4j_test_user }} -p {{ neo4j_test_passwd }}"
       when:
         - not is_container|bool

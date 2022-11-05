@@ -8,6 +8,8 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
   vars:
+    neo4j_allow_any_connection: true
+    neo4j_memory_pagecache_size: 1g
     # pragma: allowlist secret
     neo4j_password: neo4j
   pre_tasks:

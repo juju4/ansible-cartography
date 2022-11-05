@@ -118,6 +118,7 @@ jobs:
         continue-on-error: true
       - name: After script - cypher
         run: |
+          echo $JAVA_HOME
           set -x
           echo "CALL db.schema.visualization()" | cypher-shell -a localhost -u neo4j -p neo4j
           echo "MATCH (n) RETURN labels(n), count(*)" | cypher-shell -a localhost -u neo4j -p neo4j
