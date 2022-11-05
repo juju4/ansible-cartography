@@ -122,6 +122,7 @@ jobs:
           set -x
           env
           cat /etc/environment
+          export JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
           echo "CALL db.schema.visualization()" | cypher-shell -a localhost -u neo4j -p neo4j
           echo "MATCH (n) RETURN labels(n), count(*)" | cypher-shell -a localhost -u neo4j -p neo4j
           echo "MATCH ()-[r]->() RETURN count(r) as count" | cypher-shell -a localhost -u neo4j -p neo4j
