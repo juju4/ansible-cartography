@@ -120,6 +120,8 @@ jobs:
         run: |
           echo $JAVA_HOME
           set -x
+          env
+          cat /etc/environment
           echo "CALL db.schema.visualization()" | cypher-shell -a localhost -u neo4j -p neo4j
           echo "MATCH (n) RETURN labels(n), count(*)" | cypher-shell -a localhost -u neo4j -p neo4j
           echo "MATCH ()-[r]->() RETURN count(r) as count" | cypher-shell -a localhost -u neo4j -p neo4j
