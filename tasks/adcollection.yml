@@ -1,0 +1,126 @@
+---
+
+- name: Install bloodhound.py
+  ansible.builtin.pip:
+    name: bloodhound
+    version: "{{ cartography_bloodhound_pip_v | default(omit) }}"
+    state: present
+
+# sshd_config(5): This path, and all its components, must be root-owned directories that are not writable by any other user or group.
+- name: Ensure /var/_adcollection has right permissions
+  ansible.builtin.file:
+    dest: "{{ cartography_adcollection_home }}"
+    mode: 0700
+    owner: root
+    group: root
+    state: directory
+  when: false
+
+- name: Add adcollection user
+  ansible.builtin.user:
+    name: "{{ cartography_adcollection_user }}"
+    shell: /bin/bash
+    home: "{{ cartography_adcollection_home }}"
+    system: yes
+
+- name: Ensure /var/_adcollection has right permissions
+  ansible.builtin.file:
+    dest: "{{ cartography_adcollection_home }}"
+    mode: 0700
+    owner: "{{ cartography_adcollection_user }}"
+    state: directory
+
+- name: Grant cartography user read access to adcollection
+  ansible.posix.acl:
+    path: "{{ item }}"
+    entity: "{{ cartography_user }}"
+    etype: user
+    permissions: rx
+    state: present
+  loop:
+    - "{{ cartography_adcollection_home }}"
+    - "{{ cartography_adcollection_home }}/chroot"
+
+- name: Ensure /var/cache/adcollection exists
+  ansible.builtin.file:
+    dest: /var/cache/adcollection
+    mode: 0755
+    state: directory
+
+- name: Ensure settings file exists
+  ansible.builtin.copy:
+    dest: "{{ cartography_adcollection_home }}/.adcollection.conf"
+    mode: 0600
+    owner: "{{ cartography_adcollection_user }}"
+    content: |
+      ---
+      domain: {{ vault_cartography_adcollection_domain }}
+      username: {{ vault_cartography_adcollection_user }}
+      password: {{ vault_cartography_adcollection_pass }}
+      nameserver: {{ vault_cartography_adcollection_nameserver }}
+
+- name: Add adcollection script
+  ansible.builtin.copy:
+    src: adcollection.py
+    dest: /usr/local/bin/adcollection.py
+    mode: 0755
+
+- name: Configure cartography adcollection systemd unit
+  ansible.builtin.template:
+    src: "systemd-adcollection.service.j2"
+    dest: "/etc/systemd/system/adcollection.service"
+    mode: '0644'
+  notify:
+    - Reload systemd
+
+- name: Configure cartography adcollection systemd timer
+  ansible.builtin.template:
+    src: "systemd-adcollection.timer.j2"
+    dest: "/etc/systemd/system/adcollection.timer"
+    mode: '0644'
+  notify:
+    - Reload systemd
+
+- name: Enable and start cartography timer
+  ansible.builtin.service:
+    name: "adcollection.timer"
+    state: started
+    enabled: yes
+  no_log: "{{ cartography_no_log | default(true) }}"
+  when: not is_container | bool and false
+
+- name: Ensure SSH file transfer to adcollection
+  ansible.posix.authorized_key:
+    user: _adcollection
+    state: present
+    key: "{{ cartography_adcollection_authorized_sshkey }}"
+  when: cartography_adcollection_authorized_sshkey|string
+
+- name: Restrict SSH file transfer with chroot
+  ansible.builtin.blockinfile:
+    path: /etc/ssh/sshd_config
+    mode: 0644
+    block: |
+      LogLevel Verbose
+
+      # Cartography AD collection file transfer
+      Match user _adcollection
+          # ForceCommand internal-sftp
+          # ChrootDirectory {{ cartography_adcollection_home }}
+          PermitTTY no
+          AllowTcpForwarding no
+          X11Forwarding no
+          PermitTunnel no
+          GatewayPorts no
+          PasswordAuthentication no
+  notify:
+    - Restart sshd
+  when: cartography_adcollection_authorized_sshkey|string
+
+- name: Recover files to cartography account to allow rotation
+  ansible.builtin.cron:
+    name: adcollection-copy
+    minute: "5"
+    hour: "5"
+    user: "{{ cartography_user }}"
+    job: "find /var/_adcollection/ -maxdepth 1 -name '*.json' -mtime -1 -exec cp {} /var/_cartography/adcollection/ \\;"

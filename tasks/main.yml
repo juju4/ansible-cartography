@@ -17,6 +17,9 @@
 
 - name: Import cartography
   ansible.builtin.import_tasks: cartography.yml
+- name: Import adcollection
+  ansible.builtin.import_tasks: adcollection.yml
+  when: cartography_adcollection_enable|bool
 - name: Import logrotate
   ansible.builtin.import_tasks: logrotate.yml
 - name: Import systemd

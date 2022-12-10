@@ -44,6 +44,14 @@ cartography_cgroups_restriction_enable: true
 # if not empty, to be added to systemd service IPAddressAllow
 cartography_proxy_ip: ''
 
+cartography_adcollection_enable: false
+cartography_adcollection_user: _adcollection
+cartography_adcollection_home: /var/_adcollection
+# cartography_adcollection_home: /var/_adcollection/chroot
+# domain controllers IP list to use for firewall rules
+cartography_adcollection_dc: ''
+cartography_adcollection_authorized_sshkey: ''
+
 cartography_logrotate_period: 'daily'
 cartography_logrotate_rotate: 90
 cartography_logrotate_compress: true
