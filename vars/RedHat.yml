@@ -1,0 +1,13 @@
+---
+
+pkg_deps:
+  - python3-devel
+  - python3-pip
+  - python3-setuptools
+  - openssl
+  - openssl-devel
+  - gcc
+  - pkg-config
+  - libffi-devel
+  - libxml2-devel
+  - curl
