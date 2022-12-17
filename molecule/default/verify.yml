@@ -9,6 +9,7 @@
     neo4j_test_passwd: neo4j
     cartography_home: /var/_cartography
     cartography_start: "/usr/local/bin/cartography"
+    pkg_test: python3-dev
     binary_neo4j: "/usr/bin/neo4j"
     config_neo4j: /etc/neo4j/neo4j.conf
     config: ""
@@ -29,13 +30,17 @@
            or ansible_virtualization_type == "container"
           )
         )
+    - name: RedHat | Set fact
+      ansible.builtin.set_fact:
+        pkg_test: python3-devel
+      when: ansible_os_family == 'RedHat'
   tasks:
     - name: Gather package facts
       ansible.builtin.package_facts:
         manager: auto
     - name: Validate that needed packages are present
       ansible.builtin.assert:
-        that: ansible_facts.packages['python3-dev']
+        that: ansible_facts.packages[pkg_test]
 
     - name: Check cartography executable
       ansible.builtin.stat:
@@ -72,6 +77,11 @@
       when:
         - not is_container|bool
 
+    - name: Ensure procps package is present
+      ansible.builtin.package:
+        name: procps
+        state: present
+      when: ansible_os_family == "RedHat"
     - name: Check all processes
       ansible.builtin.command: ps aux
       changed_when: false
