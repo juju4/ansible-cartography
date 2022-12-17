@@ -18,7 +18,7 @@ jobs:
       matrix:
         include:
           - molecule_distro: 'rockylinux:9'
-            experimental: true
+            experimental: false
           - molecule_distro: 'redhat/ubi8'
             experimental: true
           - molecule_distro: 'rockylinux:8'
