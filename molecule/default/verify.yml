@@ -6,7 +6,7 @@
   vars:
     neo4j_test_user: neo4j
     # pragma: allowlist secret
-    neo4j_test_passwd: neo4j
+    neo4j_test_passwd: neo4j_123456
     cartography_home: /var/_cartography
     cartography_start: "/usr/local/bin/cartography"
     pkg_test: python3-dev
