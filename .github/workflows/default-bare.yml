@@ -110,6 +110,13 @@ jobs:
           cat /lib/systemd/system/neo4j.service
         if: ${{ always() }}
         continue-on-error: true
+      - name: After script - python
+        run: |
+          set -x
+          pip freeze
+          pip3 freeze
+        if: ${{ always() }}
+        continue-on-error: true
       - name: After script - run
         run: |
           set -x

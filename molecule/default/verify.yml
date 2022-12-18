@@ -114,6 +114,10 @@
         name: pip-audit
         state: present
       become: yes
+    - name: Pip list
+      ansible.builtin.command: pip list
+      changed_when: false
+      failed_when: false
     - name: Pip-audit
       ansible.builtin.command: pip-audit --path /usr/local
       changed_when: false
