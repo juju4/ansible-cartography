@@ -113,6 +113,8 @@ jobs:
       - name: After script - python
         run: |
           set -x
+          pip install pipdeptree
+          pipdeptree -r
           pip freeze
           pip3 freeze
         if: ${{ always() }}
