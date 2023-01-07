@@ -11,3 +11,6 @@ pkg_deps:
   - libffi-devel
   - libxml2-devel
   - curl
+
+pkg_remove:
+  - curl-minimal

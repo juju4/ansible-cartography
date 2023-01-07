@@ -1,5 +1,10 @@
 ---
 
+- name: Remove conflicting packages
+  ansible.builtin.package:
+    name: "{{ pkg_remove }}"
+    state: absent
+
 - name: Install cartography dependencies
   ansible.builtin.package:
     name: "{{ pkg_deps }}"
