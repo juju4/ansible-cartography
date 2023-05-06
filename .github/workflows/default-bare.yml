@@ -21,7 +21,7 @@ jobs:
         os: [ubuntu-22.04, ubuntu-20.04]
     env:
       ANSIBLE_CALLBACKS_ENABLED: profile_tasks
-      ANSIBLE_EXTRA_VARS: ""
+      ANSIBLE_EXTRA_VARS: "-e cartography_no_log=false"
       ANSIBLE_ROLE: juju4.cartography
 
     steps:
