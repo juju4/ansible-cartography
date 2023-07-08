@@ -5,8 +5,8 @@
     rotate {{ cartography_logrotate_rotate|int }}
     {{ cartography_logrotate_period }}
 {% if cartography_logrotate_datext %}
-        dateext
-        dateformat {{ cartography_logrotate_datformat }}
+    dateext
+    dateformat {{ cartography_logrotate_datformat }}
 {% endif%}
     missingok
     notifempty
@@ -17,5 +17,5 @@
     missingok
     notifempty
     copytruncate
-    create 0640 _cartography root
+    create 0640 {{ cartography_user }} root
 }
