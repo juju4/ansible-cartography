@@ -98,6 +98,7 @@ In this case, the identity management is handled downstream.
 |From|To|protocol/port|
 |----|--|-------------|
 |Authorized EndUser/Jumphost|Website|tcp/443|
+|Authorized EndUser/Jumphost|Neo4j browser|tcp/7473|
 |Cartography|Ingestion Source|tcp/443, other ports as required|
 |System|DNS server|tcp+udp/53|
 |System|SMTP server|tcp/587|
