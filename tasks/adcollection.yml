@@ -10,7 +10,7 @@
 - name: Ensure /var/_adcollection has right permissions
   ansible.builtin.file:
     dest: "{{ cartography_adcollection_home }}"
-    mode: 0700
+    mode: '0700'
     owner: root
     group: root
     state: directory
@@ -26,7 +26,7 @@
 - name: Ensure /var/_adcollection has right permissions
   ansible.builtin.file:
     dest: "{{ cartography_adcollection_home }}"
-    mode: 0700
+    mode: '0700'
     owner: "{{ cartography_adcollection_user }}"
     state: directory
 
@@ -44,13 +44,13 @@
 - name: Ensure /var/cache/adcollection exists
   ansible.builtin.file:
     dest: /var/cache/adcollection
-    mode: 0755
+    mode: '0755'
     state: directory
 
 - name: Ensure settings file exists
   ansible.builtin.copy:
     dest: "{{ cartography_adcollection_home }}/.adcollection.conf"
-    mode: 0600
+    mode: '0600'
     owner: "{{ cartography_adcollection_user }}"
     content: |
       ---
@@ -63,7 +63,7 @@
   ansible.builtin.copy:
     src: adcollection.py
     dest: /usr/local/bin/adcollection.py
-    mode: 0755
+    mode: '0755'
 
 - name: Configure cartography adcollection systemd unit
   ansible.builtin.template:
@@ -99,7 +99,7 @@
 - name: Restrict SSH file transfer with chroot
   ansible.builtin.blockinfile:
     path: /etc/ssh/sshd_config
-    mode: 0644
+    mode: '0644'
     block: |
       LogLevel Verbose
 
