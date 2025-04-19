@@ -14,3 +14,8 @@ pkg_deps:
   - curl
 
 pkg_remove: []
+
+cartography_virtualenv_pkg:
+  - python3-pip
+  - python3-virtualenv
+  - virtualenv

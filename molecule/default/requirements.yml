@@ -7,3 +7,6 @@ roles:
   - name: kevincoakley.neo4j
     src: https://github.com/juju4/ansible-role-neo4j/
     version: devel
+  - src: https://github.com/juju4/ansible-redhat-epel/
+    version: main
+    name: juju4.redhat_epel

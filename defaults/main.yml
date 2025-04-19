@@ -7,10 +7,6 @@ cartography_version: 0.75.0
 cartography_user: _cartography
 cartography_home: /var/_cartography
 cartography_venv: /var/_cartography/venv
-cartography_virtualenv_pkg:
-  - python3-pip
-  - python3-virtualenv
-  - virtualenv
 
 cartography_env_variables_template: "default-env.j2"
 cartography_neo4j_url: 'bolt://localhost:7687'
