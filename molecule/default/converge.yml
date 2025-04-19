@@ -35,5 +35,9 @@
     - name: Debug | var ansible_virtualization_type
       ansible.builtin.debug:
         var: ansible_virtualization_type
+    - name: Ensure gnup is present
+      ansible.builtin.package:
+        name: gnupg
+        state: present
   roles:
     - juju4.cartography
