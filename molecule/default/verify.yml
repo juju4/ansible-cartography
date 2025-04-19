@@ -8,7 +8,8 @@
     # pragma: allowlist secret
     neo4j_test_passwd: neo4j_123456
     cartography_home: /var/_cartography
-    cartography_start: "/usr/local/bin/cartography"
+    cartography_venv: /var/_cartography/venv
+    cartography_start: "/var/_cartography/venv/bin/cartography"
     pkg_test: python3-dev
     binary_neo4j: "/usr/bin/neo4j"
     config_neo4j: /etc/neo4j/neo4j.conf
@@ -101,7 +102,8 @@
         - not is_container|bool
 
     - name: Pip outdated
-      ansible.builtin.command: pip list --outdated --path /usr/local/
+      ansible.builtin.command:
+        cmd: "{{ cartography_venv }}/bin/pip list --outdated"
       changed_when: false
       register: outdated
     - name: Validate no outdated python pip
@@ -113,22 +115,27 @@
       ansible.builtin.pip:
         name: pip-audit
         state: present
+        virtualenv: "{{ cartography_venv }}"
       become: yes
     - name: Pip list
-      ansible.builtin.command: pip list
+      ansible.builtin.command:
+        cmd: "{{ cartography_venv }}/bin/pip list"
       changed_when: false
       failed_when: false
     - name: Ensure pipdeptree is present
       ansible.builtin.pip:
         name: pipdeptree
         state: present
+        virtualenv: "{{ cartography_venv }}"
       become: yes
     - name: Pipdeptree
-      ansible.builtin.command: pipdeptree -r
+      ansible.builtin.command:
+        cmd: "{{ cartography_venv }}/bin/pipdeptree -r"
       changed_when: false
       failed_when: false
     - name: Pip-audit
-      ansible.builtin.command: pip-audit --path /usr/local
+      ansible.builtin.command:
+        cmd: "{{ cartography_venv }}/bin/pip-audit"
       changed_when: false
       register: audit
     - name: Validate no known vulnerabilities from pip-audit
