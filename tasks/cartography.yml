@@ -10,10 +10,19 @@
     name: "{{ pkg_deps }}"
     state: present
 
+- name: Virtualenv dependencies
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: "present"
+  with_items: "{{ cartography_virtualenv_pkg }}"
+  register: pkg_result
+  until: pkg_result is success
+
 - name: Install cartography
   ansible.builtin.pip:
     name: "{{ cartography_pip }}"
     version: "{{ cartography_version | default(omit) }}"
+    virtualenv: "{{ cartography_venv }}"
     state: present
 
 - name: Ensure cartography user exists
