@@ -41,7 +41,8 @@
         manager: auto
     - name: Validate that needed packages are present
       ansible.builtin.assert:
-        that: ansible_facts.packages[pkg_test]
+        that:
+          - ansible_facts.packages[pkg_test] is defined
 
     - name: Check cartography executable
       ansible.builtin.stat:
@@ -74,7 +75,8 @@
       failed_when: false
     - name: Validate ps output
       ansible.builtin.assert:
-        that: ps3.stdout
+        that:
+          - ps3.stdout | length > 0
       when:
         - not is_container|bool
 
