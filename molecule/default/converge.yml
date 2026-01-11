@@ -46,5 +46,5 @@
         name: gnupg
         state: present
   roles:
-    - { role: juju4.redhat_epel, when: ansible_os_family == "RedHat" }
+    - { role: juju4.redhat_epel, when: ansible_facts.os_family == "RedHat" }
     - juju4.cartography
